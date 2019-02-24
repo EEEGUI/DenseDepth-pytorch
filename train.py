@@ -14,8 +14,8 @@ def train():
         for i in range(100):
             # get the inputs
             inputs = torch.randn(1, 3, 640, 480).to(device)
-            # labels = inputs[:, 1, :, :].to(device)
-            labels = torch.randn(1, 1, 640, 480).to(device)
+            labels = inputs[:, :1, :, :].to(device)
+            # labels = torch.randn(1, 1, 640, 480).to(device)
             # zero the parameter gradients
             optimizer.zero_grad()
 
