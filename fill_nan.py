@@ -12,6 +12,7 @@ import numpy as np
 from pypardiso import spsolve
 from PIL import Image
 from read_depth import depth_read
+import time
 
 
 #
@@ -119,9 +120,15 @@ def fill_depth_colorization(imgRgb=None, imgDepthInput=None, alpha=1):
 
 
 if __name__ == '__main__':
+    t1 = time.time()
     rgb_img = np.array(Image.open('0000000016_RGB.png'), dtype=int)
     rgb_img = rgb_img / np.max(rgb_img)
     depth_img = depth_read('0000000016.png')
     a = fill_depth_colorization(rgb_img, depth_img)
-    print(np.isnan(a).astype(int).sum())
     print(a.shape)
+    print(np.min(a), np.max(a))
+    t2 = time.time()
+    print('Used time is %.2f' % (t2 - t1))
+    a = (a/a.max() * 255).astype('int8')
+    img = Image.fromarray(a)
+    img.show()

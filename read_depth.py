@@ -14,7 +14,7 @@ def depth_read(filename):
     assert(np.max(depth_png) > 255)
 
     depth = depth_png.astype(np.float) / 256.
-    depth[depth_png == 0] = -1.
+    # depth[depth_png == 0] = -1.
     return depth
 
 if __name__ == '__main__':
