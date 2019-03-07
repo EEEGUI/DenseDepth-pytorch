@@ -189,6 +189,7 @@ def fill_depth_colorization_jit(imgRgb=None, imgDepthInput=None, alpha=1):
     vals = []
     t1 = time.time()
     print('t1=%.2f' % (t1-t0))
+    @nb.jit
     def func(x, W, H, winRad, len_window, indsM_copy, grayImg):
 
         i = x % H
