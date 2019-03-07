@@ -115,7 +115,7 @@ def fill_depth_colorization(rgb_filename, depth_filename, alpha=1):
 
 
 def main():
-    root = '~/Documents/DataSet/KITTI/'
+    root = '/home/hgnb/Documents/DataSet/KITTI/'
 
     if not os.path.exists(root + 'depth_maps_filled'):
         os.mkdir(root + 'depth_maps_filled')
@@ -143,7 +143,6 @@ def main():
                     depth_filled_filename = depth_filled_img_root + img_name
                     depth = fill_depth_colorization(rgb_filename, depth_filename)
                     depth2img(depth, depth_filled_filename)
-
 
 
 if __name__ == '__main__':
