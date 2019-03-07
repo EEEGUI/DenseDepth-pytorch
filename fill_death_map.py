@@ -4,6 +4,7 @@ import skimage
 import numpy as np
 from pypardiso import spsolve
 from PIL import Image
+from tqdm import tqdm
 
 
 def img2depth(filename):
@@ -127,7 +128,7 @@ def main():
         if fold in rgb_folds:
             if not os.path.exists(root + 'depth_maps_filled/' + fold):
                 os.mkdir(root + 'depth_maps_filled/' + fold)
-
+            print(fold)
             depth_img_root = '%sdata_depth_annotated/train/%s/proj_depth/groundtruth/image_02/' % (root, fold)
             rgb_img_root = '%sKITTI_raw_data/%s/image_02/data/' % (root, fold)
             depth_filled_img_root = '%sdepth_maps_filled/%s/' % (root, fold)
@@ -135,7 +136,7 @@ def main():
             depth_images = os.listdir(depth_img_root)
             rgb_images = os.listdir(rgb_img_root)
             depth_filled_images = os.listdir(depth_filled_img_root)
-            for img_name in depth_images:
+            for img_name in tqdm(depth_images):
                 assert (img_name in rgb_images)
                 if img_name not in depth_filled_images:
                     depth_filename = depth_img_root + img_name
