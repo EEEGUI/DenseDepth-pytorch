@@ -38,5 +38,6 @@ def train():
 
     print('Finished Training')
     torch.save(net.state_dict(), 'densedepth.pt')
+
 if __name__ == '__main__':
     train()

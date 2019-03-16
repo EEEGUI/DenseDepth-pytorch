@@ -122,14 +122,14 @@ class RandomChannel(object):
         return {'image': image, 'depth': depth}
 
 
-data_transform = transforms.Compose([Rescale((320, 96)),
+data_transform = transforms.Compose([Rescale((1280, 384)),
                                      RandomChannel(),
                                     ToTensor(),
                                      Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], max_depth=80)])
 
 dataset = KittiDepthData('kitti_dataset.csv', transform=data_transform)
 
-dataset_loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=True, num_workers=4)
+dataset_loader = torch.utils.data.DataLoader(dataset, batch_size=4, shuffle=True, num_workers=4)
 
 
 
