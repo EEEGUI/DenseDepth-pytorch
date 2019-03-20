@@ -1,11 +1,11 @@
 import os
 import scipy
-import skimage
+# import skimage
 import numpy as np
-from pypardiso import spsolve
+# from pypardiso import spsolve
 from PIL import Image
 from tqdm import tqdm
-
+import pandas as pd
 
 def img2depth(filename):
     depth_png = np.array(Image.open(filename), dtype=int)
@@ -115,8 +115,39 @@ def fill_depth_colorization(rgb_filename, depth_filename, alpha=1):
     return output
 
 
+def file_list():
+    root = '/home/lin/Documents/dataset/KITTI/'
+
+    image = []
+    depth = []
+    depth_sparse = []
+    depth_folds = os.listdir(root + 'data_depth_annotated/train/')
+    rgb_folds = os.listdir(root + 'KITTI_raw_data')
+
+    for fold in depth_folds:
+        if fold in rgb_folds:
+            depth_img_root = '%sdata_depth_annotated/train/%s/proj_depth/groundtruth/image_02/' % (root, fold)
+            rgb_img_root = '%sKITTI_raw_data/%s/image_02/data/' % (root, fold)
+            depth_filled_img_root = '%sdepth_maps_filled/%s/' % (root, fold)
+
+            depth_images = os.listdir(depth_img_root)
+            rgb_images = os.listdir(rgb_img_root)
+            depth_filled_images = os.listdir(depth_filled_img_root)
+            for img_name in tqdm(depth_images):
+                if (img_name in depth_filled_images) and (img_name in rgb_images):
+                    depth_filename = depth_img_root + img_name
+                    rgb_filename = rgb_img_root + img_name
+                    depth_filled_filename = depth_filled_img_root + img_name
+
+                    depth_sparse.append(depth_filename)
+                    image.append(rgb_filename)
+                    depth.append(depth_filled_filename)
+
+    pd.DataFrame({'image':image, 'depth':depth, 'depth_sparse':depth_sparse}).to_csv('kitti_dataset.csv', index=False)
+
+
 def main():
-    root = '/home/hgnb/Documents/DataSet/KITTI/'
+    root = '/home/lin/Documents/dataset/KITTI/'
 
     if not os.path.exists(root + 'depth_maps_filled'):
         os.mkdir(root + 'depth_maps_filled')
@@ -147,4 +178,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    file_list()
