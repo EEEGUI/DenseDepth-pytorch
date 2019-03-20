@@ -1,15 +1,18 @@
-from model import DDNet
+from model import DDNet, PSPDepthNet
 from loss import criterion
 import torch.optim as optim
 import torch
 from Dataloader import dataset_loader
 from tensorboardX import SummaryWriter
+from icnet import icnet
 
 
 def train():
     writer = SummaryWriter('log')
-    device = torch.device('cuda')
-    net = DDNet().to(device)
+    device = torch.device('cpu')
+    # net = DDNet().to(device)
+    # net = PSPDepthNet().to(device)
+    net = icnet().to(device)
     optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
     n_batch = len(dataset_loader)
     for epoch in range(10):  # loop over the dataset multiple times
@@ -24,6 +27,7 @@ def train():
 
             # forward + backward + optimize
             outputs = net(inputs)
+            # outputs, _ = net(inputs)
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
@@ -38,5 +42,6 @@ def train():
 
     print('Finished Training')
     torch.save(net.state_dict(), 'densedepth.pt')
+
 if __name__ == '__main__':
     train()

@@ -11,7 +11,7 @@ def criterion(y_true, y_pred, theta=0.1, max_depth_val=1000.0/10.0):
 
     l_edges = torch.mean(torch.abs(dy_pred - dy_true) + torch.abs(dx_true - dx_pred))
 
-    ssim_loss = pytorch_ssim.SSIM()
+    ssim_loss = pytorch_ssim.SSIM(device=torch.device('cpu'))
     l_ssim = torch.clamp(1 - ssim_loss(y_true, y_pred), 0, 1)
 
     return theta * l_depth + l_edges + l_ssim
