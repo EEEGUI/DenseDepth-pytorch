@@ -116,7 +116,11 @@ def fill_depth_colorization(rgb_filename, depth_filename, alpha=1):
 
 
 def file_list():
-    root = '/home/lin/Documents/dataset/KITTI/'
+    """
+    用于生成数据的路径，即assets中的train.csv
+    :return:
+    """
+    root = '/home/lin/Documents/dataset/KITTI/' # 修改为自己数据集的路径
 
     image = []
     depth = []
@@ -143,11 +147,15 @@ def file_list():
                     image.append(rgb_filename)
                     depth.append(depth_filled_filename)
 
-    pd.DataFrame({'image':image, 'depth':depth, 'depth_sparse':depth_sparse}).to_csv('train.csv', index=False)
+    pd.DataFrame({'image':image, 'depth':depth, 'depth_sparse':depth_sparse}).to_csv('assets/train.csv', index=False)
 
 
 def main():
-    root = '/home/lin/Documents/dataset/KITTI/'
+    """
+    填充深度图的缺失值
+    :return:
+    """
+    root = '/home/lin/Documents/dataset/KITTI/' # 修改为自己数据集的路径
 
     if not os.path.exists(root + 'depth_maps_filled'):
         os.mkdir(root + 'depth_maps_filled')
