@@ -1,8 +1,8 @@
 import os
 import scipy
-# import skimage
+import skimage
 import numpy as np
-# from pypardiso import spsolve
+from pypardiso import spsolve
 from PIL import Image
 from tqdm import tqdm
 import pandas as pd
@@ -143,7 +143,7 @@ def file_list():
                     image.append(rgb_filename)
                     depth.append(depth_filled_filename)
 
-    pd.DataFrame({'image':image, 'depth':depth, 'depth_sparse':depth_sparse}).to_csv('kitti_dataset.csv', index=False)
+    pd.DataFrame({'image':image, 'depth':depth, 'depth_sparse':depth_sparse}).to_csv('train.csv', index=False)
 
 
 def main():

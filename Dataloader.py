@@ -122,14 +122,49 @@ class RandomChannel(object):
         return {'image': image, 'depth': depth}
 
 
-data_transform = transforms.Compose([Rescale((1025, 2049)),
-                                     RandomChannel(),
-                                    ToTensor(),
-                                     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], max_depth=80)])
+def get_train_loader(cfg):
+    # TODO channel变换后与Normalization的值对应不上
+    train_transform = transforms.Compose([Rescale((384, 1280)),
+                                          RandomChannel(),
+                                          ToTensor(),
+                                          Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225],
+                                                    max_depth=80)])
 
-dataset = KittiDepthData('kitti_dataset.csv', transform=data_transform)
+    train_set = KittiDepthData(cfg['data']['train_split'], transform=train_transform)
 
-dataset_loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=True, num_workers=4)
+    train_loader = torch.utils.data.DataLoader(train_set, batch_size=1, shuffle=True, num_workers=4)
+
+    return train_loader
+
+
+def get_valid_loader(cfg):
+    # TODO channel变换后与Normalization的值对应不上
+    valid_transform = transforms.Compose([Rescale((384, 1280)),
+                                         ToTensor(),
+                                         Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225],
+                                                   max_depth=80)])
+
+    valid_set = KittiDepthData(cfg['data']['valid_split'], transform=valid_transform)
+
+    valid_loader = torch.utils.data.DataLoader(valid_set, batch_size=1, shuffle=True, num_workers=4)
+
+    return valid_loader
+
+
+def get_test_loader(cfg):
+    # TODO channel变换后与Normalization的值对应不上
+    valid_transform = transforms.Compose([Rescale((384, 1280)),
+                                         ToTensor(),
+                                         Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225],
+                                                   max_depth=80)])
+
+    valid_set = KittiDepthData(cfg['data']['test_split'], transform=valid_transform)
+
+    valid_loader = torch.utils.data.DataLoader(valid_set, batch_size=1, shuffle=True, num_workers=4)
+
+    return valid_loader
+
+
 
 
 
